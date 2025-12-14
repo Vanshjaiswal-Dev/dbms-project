@@ -18,6 +18,18 @@ const AdminDashboard = () => {
     fetchAllOrders();
   }, [isAdmin, navigate, fetchAllOrders]);
 
+  // Auto-refresh stats every 10 seconds
+  useEffect(() => {
+    if (!isAdmin()) return;
+
+    const interval = setInterval(() => {
+      console.log('🔄 Auto-refreshing dashboard stats...');
+      fetchAllOrders();
+    }, 10000); // 10 seconds
+
+    return () => clearInterval(interval);
+  }, [isAdmin, fetchAllOrders]);
+
   const statCards = [
     {
       title: 'Total Orders',

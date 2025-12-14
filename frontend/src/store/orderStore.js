@@ -78,6 +78,7 @@ const useOrderStore = create((set, get) => ({
   },
 
   fetchAllOrders: async () => {
+    const previousCount = get().allOrders.length;
     set({ isLoading: true, error: null });
     try {
       const response = await api.get('/orders/admin');
@@ -85,6 +86,16 @@ const useOrderStore = create((set, get) => ({
         ...order,
         items: typeof order.items === 'string' ? JSON.parse(order.items) : order.items
       }));
+      
+      // Check if new orders arrived
+      if (orders.length > previousCount) {
+        const newOrdersCount = orders.length - previousCount;
+        toast.success(`${newOrdersCount} new order${newOrdersCount > 1 ? 's' : ''} received! 🔔`, {
+          duration: 4000,
+          icon: '📦',
+        });
+      }
+      
       set({ 
         allOrders: orders,
         isLoading: false 

@@ -11,6 +11,7 @@ const AdminManageOrders = () => {
   const { isAdmin } = useAuthStore();
   const { allOrders, isLoading, fetchAllOrders, updateOrderStatus } = useOrderStore();
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [autoRefresh, setAutoRefresh] = useState(true);
 
   useEffect(() => {
     if (!isAdmin()) {
@@ -19,6 +20,18 @@ const AdminManageOrders = () => {
     }
     fetchAllOrders();
   }, [isAdmin, navigate, fetchAllOrders]);
+
+  // Auto-refresh orders every 5 seconds
+  useEffect(() => {
+    if (!isAdmin() || !autoRefresh) return;
+
+    const interval = setInterval(() => {
+      console.log('🔄 Auto-refreshing orders...');
+      fetchAllOrders();
+    }, 5000); // 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isAdmin, autoRefresh, fetchAllOrders]);
 
   const toggleOrder = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
@@ -48,12 +61,43 @@ const AdminManageOrders = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         {/* Header */}
         <div className="mb-6 sm:mb-10">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-textPrimary mb-1 sm:mb-2">
-            Manage <span className="gradient-text">Orders</span>
-          </h1>
-          <p className="text-sm sm:text-base lg:text-lg text-textSecondary">
-            View and update order status
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-textPrimary mb-1 sm:mb-2">
+                Manage <span className="gradient-text">Orders</span>
+              </h1>
+              <p className="text-sm sm:text-base lg:text-lg text-textSecondary">
+                View and update order status
+              </p>
+            </div>
+            
+            {/* Auto-refresh Toggle */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => fetchAllOrders()}
+                className="btn-secondary flex items-center gap-2 text-sm"
+                title="Refresh now"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Refresh
+              </button>
+              
+              <button
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  autoRefresh 
+                    ? 'bg-green-100 text-green-700 border-2 border-green-300' 
+                    : 'bg-gray-100 text-gray-600 border-2 border-gray-300'
+                }`}
+                title={autoRefresh ? 'Auto-refresh enabled (5s)' : 'Auto-refresh disabled'}
+              >
+                <div className={`w-3 h-3 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                <span className="hidden sm:inline">Auto</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Orders List */}
