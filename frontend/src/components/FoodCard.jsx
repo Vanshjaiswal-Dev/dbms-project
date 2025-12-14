@@ -52,7 +52,7 @@ const FoodCard = ({ item }) => {
               </div>
               
               {item.description && (
-                <p className="text-xs sm:text-sm text-gray-500 line-clamp-2 mb-3">
+                <p className="text-xs sm:text-sm text-gray-500 line-clamp-2 mb-1 pr-1">
                   {item.description}
                 </p>
               )}
