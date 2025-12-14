@@ -50,16 +50,25 @@ const useOrderStore = create((set, get) => ({
   fetchUserOrders: async () => {
     set({ isLoading: true, error: null });
     try {
+      console.log('🔄 Fetching user orders...');
       const response = await api.get('/orders/user');
+      console.log('📦 Orders response:', response.data);
+      
       const orders = response.data.data.map(order => ({
         ...order,
         items: typeof order.items === 'string' ? JSON.parse(order.items) : order.items
       }));
+      
+      console.log('✅ Processed orders:', orders);
+      console.log('📊 Total orders count:', orders.length);
+      
       set({ 
         orders: orders,
         isLoading: false 
       });
     } catch (error) {
+      console.error('❌ Fetch user orders error:', error);
+      console.error('Error details:', error.response?.data);
       set({ 
         error: error.response?.data?.message || 'Failed to fetch orders',
         isLoading: false 

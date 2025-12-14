@@ -146,6 +146,7 @@ const createOrder = async (req, res) => {
 const getUserOrders = async (req, res) => {
   try {
     const userId = req.user.id;
+    console.log('🔍 Fetching orders for user ID:', userId);
 
     const [orders] = await pool.query(
       `SELECT 
@@ -167,6 +168,9 @@ const getUserOrders = async (req, res) => {
       ORDER BY o.created_at DESC`,
       [userId]
     );
+
+    console.log('📊 Found orders:', orders.length);
+    console.log('📦 Orders data:', JSON.stringify(orders, null, 2));
 
     res.status(200).json({
       success: true,
