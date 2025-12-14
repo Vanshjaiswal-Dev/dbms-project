@@ -48,6 +48,7 @@ const useOrderStore = create((set, get) => ({
   },
 
   fetchUserOrders: async () => {
+    const previousOrders = get().orders;
     set({ isLoading: true, error: null });
     try {
       console.log('🔄 Fetching user orders...');
@@ -61,6 +62,25 @@ const useOrderStore = create((set, get) => ({
       
       console.log('✅ Processed orders:', orders);
       console.log('📊 Total orders count:', orders.length);
+      
+      // Check for status changes
+      if (previousOrders.length > 0) {
+        orders.forEach(newOrder => {
+          const oldOrder = previousOrders.find(o => o.id === newOrder.id);
+          if (oldOrder && oldOrder.status !== newOrder.status) {
+            // Status changed!
+            const statusMessages = {
+              received: 'Order received! 📝',
+              preparing: 'Your order is being prepared! 👨‍🍳',
+              ready: 'Your order is ready for pickup! 🎉',
+              completed: 'Order completed! Thank you! ✅'
+            };
+            toast.success(statusMessages[newOrder.status] || 'Order status updated!', {
+              duration: 5000,
+            });
+          }
+        });
+      }
       
       set({ 
         orders: orders,
