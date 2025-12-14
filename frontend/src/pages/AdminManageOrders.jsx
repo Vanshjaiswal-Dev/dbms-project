@@ -12,6 +12,7 @@ const AdminManageOrders = () => {
   const { allOrders, isLoading, fetchAllOrders, updateOrderStatus } = useOrderStore();
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (!isAdmin()) {
@@ -21,9 +22,9 @@ const AdminManageOrders = () => {
     fetchAllOrders();
   }, [isAdmin, navigate, fetchAllOrders]);
 
-  // Auto-refresh orders every 5 seconds
+  // Auto-refresh orders every 5 seconds (but not while updating)
   useEffect(() => {
-    if (!isAdmin() || !autoRefresh) return;
+    if (!isAdmin() || !autoRefresh || isUpdating) return;
 
     const interval = setInterval(() => {
       console.log('🔄 Auto-refreshing orders...');
@@ -31,14 +32,19 @@ const AdminManageOrders = () => {
     }, 5000); // 5 seconds
 
     return () => clearInterval(interval);
-  }, [isAdmin, autoRefresh, fetchAllOrders]);
+  }, [isAdmin, autoRefresh, isUpdating, fetchAllOrders]);
 
   const toggleOrder = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
   const handleStatusChange = async (orderId, newStatus) => {
+    setIsUpdating(true);
     await updateOrderStatus(orderId, newStatus);
+    // Resume auto-refresh after 2 seconds
+    setTimeout(() => {
+      setIsUpdating(false);
+    }, 2000);
   };
 
   const formatDate = (dateString) => {
