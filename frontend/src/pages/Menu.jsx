@@ -116,13 +116,13 @@ const Menu = () => {
 
         {/* Menu Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-4 max-w-4xl mx-auto">
             {[...Array(8)].map((_, index) => (
               <FoodCardSkeleton key={index} />
             ))}
           </div>
         ) : filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-slide-up">
+          <div className="grid grid-cols-1 gap-4 max-w-4xl mx-auto animate-slide-up">
             {filteredItems.map((item) => (
               <FoodCard key={item.id} item={item} />
             ))}

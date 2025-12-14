@@ -17,12 +17,10 @@ const useCartStore = create(
               i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
             ),
           });
-          toast.success('Item quantity increased');
         } else {
           set({
             items: [...items, { ...item, quantity: 1 }],
           });
-          toast.success('Added to cart');
         }
       },
 
@@ -30,7 +28,6 @@ const useCartStore = create(
         set({
           items: get().items.filter((item) => item.id !== itemId),
         });
-        toast.success('Removed from cart');
       },
 
       updateQuantity: (itemId, quantity) => {

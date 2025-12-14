@@ -77,7 +77,7 @@ const getMenuItem = async (req, res) => {
 // @access  Private/Admin
 const addMenuItem = async (req, res) => {
   try {
-    const { name, price, category, image, available } = req.body;
+    const { name, description, price, category, image, available } = req.body;
 
     // Validation
     if (!name || !price || !category) {
@@ -97,8 +97,8 @@ const addMenuItem = async (req, res) => {
 
     // Insert menu item
     const [result] = await pool.query(
-      'INSERT INTO menu_items (name, price, category, image, available) VALUES (?, ?, ?, ?, ?)',
-      [name, price, category, image || null, available !== undefined ? available : true]
+      'INSERT INTO menu_items (name, description, price, category, image, available) VALUES (?, ?, ?, ?, ?, ?)',
+      [name, description || null, price, category, image || null, available !== undefined ? available : true]
     );
 
     // Fetch the created item
@@ -127,7 +127,7 @@ const addMenuItem = async (req, res) => {
 // @access  Private/Admin
 const updateMenuItem = async (req, res) => {
   try {
-    const { name, price, category, image, available } = req.body;
+    const { name, description, price, category, image, available } = req.body;
 
     // Check if menu item exists
     const [existingItem] = await pool.query(
@@ -157,6 +157,10 @@ const updateMenuItem = async (req, res) => {
     if (name !== undefined) {
       updates.push('name = ?');
       params.push(name);
+    }
+    if (description !== undefined) {
+      updates.push('description = ?');
+      params.push(description);
     }
     if (price !== undefined) {
       updates.push('price = ?');
