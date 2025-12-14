@@ -1,0 +1,190 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-textPrimary;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-primary-dark text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-glow hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-secondary to-secondary-dark text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-medium hover:scale-105 active:scale-95;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent border-2 border-primary text-primary px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-primary hover:text-white hover:shadow-glow active:scale-95;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border-2 border-border rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all bg-white text-textPrimary placeholder:text-textTertiary;
+  }
+  
+  .card {
+    @apply bg-surface rounded-2xl shadow-soft border border-border transition-all duration-300;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-medium hover:border-primary/30 hover:-translate-y-1;
+  }
+
+  .card-interactive {
+    @apply cursor-pointer hover:shadow-large hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5;
+  }
+
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
+  }
+
+  /* Mobile touch target - ensures minimum 44px touch area */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Mobile-optimized text sizes */
+  @media (max-width: 640px) {
+    body {
+      @apply text-base;
+    }
+  }
+}
+
+/* Smooth page transitions */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Skeleton loader animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, #F1F5F9 4%, #E2E8F0 25%, #F1F5F9 36%);
+  background-size: 1000px 100%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #FF6B35, #E6522A);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #FF8C61, #FF6B35);
+}
+
+/* Safe area padding for mobile devices */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* Prevent text size adjustment on mobile */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile tap highlight removal */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
+}
+
+/* Image overlay effect */
+.image-overlay {
+  position: relative;
+}
+
+.image-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.image-overlay:hover::after {
+  opacity: 1;
+}
